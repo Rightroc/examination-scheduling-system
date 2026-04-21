@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Software Engineering - Exam Scheduling System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-calendar-alt"></i> Software Engineering Department</h1>
+            <h2>Examination Scheduling System</h2>
+        </header>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash-message {{ category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <!-- System Status -->
+        {% if stats %}
+        <div class="section status-section">
+            <h2><i class="fas fa-chart-bar"></i> System Status</h2>
+            <div class="status-grid">
+                <div class="status-item">
+                    <div class="status-number">{{ stats.total_courses }}</div>
+                    <div class="status-label">Courses</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-number">{{ stats.total_rooms }}</div>
+                    <div class="status-label">Rooms</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-number">{{ stats.total_invigilators }}</div>
+                    <div class="status-label">Invigilators</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-number">{{ stats.total_scheduled }}</div>
+                    <div class="status-label">Exams Scheduled</div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- File Upload Section -->
+        <div class="section">
+            <h2><i class="fas fa-upload"></i> 1. Upload Data Files</h2>
+            <form action="{{ url_for('upload_files') }}" method="post" enctype="multipart/form-data">
+                <div class="file-grid">
+                    <div class="file-input">
+                        <label for="courses_file">Courses (CSV)</label>
+                        <input type="file" id="courses_file" name="courses_file" accept=".csv">
+                        <small>Format: code,students</small>
+                    </div>
+                    
+                    <div class="file-input">
+                        <label for="rooms_file">Halls (CSV)</label>
+                        <input type="file" id="rooms_file" name="rooms_file" accept=".csv">
+                        <small>Format: name,capacity</small>
+                    </div>
+                    
+                    <div class="file-input">
+                        <label for="invigilators_file">Invigilators (CSV)</label>
+                        <input type="file" id="invigilators_file" name="invigilators_file" accept=".csv">
+                        <small>Format: staff_id,name,department,max_sessions</small>
+                    </div>
+                    
+                    <div class="file-input">
+                        <label for="time_slots_file">Time Slots (CSV)</label>
+                        <input type="file" id="time_slots_file" name="time_slots_file" accept=".csv">
+                        <small>Format: time_slot</small>
+                    </div>
+                    
+                    <div class="file-input">
+                        <label for="students_file">Students (CSV)</label>
+                        <input type="file" id="students_file" name="students_file" accept=".csv">
+                        <small>Format: student_id,courses</small>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-cloud-upload-alt"></i> Upload All Files
+                </button>
+            </form>
+        </div>
+
+        <!-- Schedule Generation Section -->
+        <div class="section">
+            <h2><i class="fas fa-magic"></i> 2. Generate Schedule</h2>
+            <a href="{{ url_for('generate_schedule') }}" class="btn btn-success">
+                <i class="fas fa-play"></i> Generate Exam Schedule with Invigilators
+            </a>
+            <a href="{{ url_for('view_schedule') }}" class="btn btn-info">
+                <i class="fas fa-eye"></i> View Saved Schedule
+            </a>
+        </div>
+
+        <!-- Student Lookup Section -->
+        <div class="section">
+            <h2><i class="fas fa-search"></i> 3. Student Lookup</h2>
+            <form action="{{ url_for('student_lookup') }}" method="post">
+                <div class="student-lookup">
+                    <input type="text" name="student_id" placeholder="Enter Student Reg no (e.g 2021...52)" required>
+                    <button type="submit" class="btn btn-warning">
+                        <i class="fas fa-search"></i> Find Student Schedule
+                    </button>
+                </div>
+            </form>
+        </div>
+
+                <!-- Export Section -->
+        {% if has_schedule %}
+        <div class="section">
+            <h2><i class="fas fa-download"></i> 4. Export Data</h2>
+            <div class="export-options">
+                <a href="{{ url_for('export_basic_schedule') }}" class="btn btn-export">
+                    <i class="fas fa-file-csv"></i> Export student Schedule
+                </a>
+                <a href="{{ url_for('export_schedule') }}" class="btn btn-export">
+                    <i class="fas fa-table"></i> Export Detailed Schedule
+                </a>
+                <a href="{{ url_for('export_invigilator_schedule') }}" class="btn btn-export">
+                    <i class="fas fa-user-tie"></i> Export Invigilator Assignments
+                </a>
+                <a href="{{ url_for('clear_schedule') }}" class="btn btn-danger">
+                    <i class="fas fa-trash"></i> Clear Display
+                </a>
+            </div>
+            <div class="export-descriptions">
+                <div class="export-desc">
+                    <strong>Basic Schedule:</strong> Week, Day, Time, Room, Course only
+                </div>
+                <div class="export-desc">
+                    <strong>Detailed Schedule:</strong> Includes student counts and capacities
+                </div>
+                <div class="export-desc">
+                    <strong>Invigilator Assignments:</strong> Staff assignments per session
+                </div>
+                <div class="export-desc">
+                    <strong>Comprehensive:</strong> Complete data with all details
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Invigilators List -->
+        {% if invigilators %}
+        <div class="section">
+            <h2><i class="fas fa-user-tie"></i> Available Invigilators</h2>
+            <div class="invigilators-grid">
+                {% for invigilator in invigilators %}
+                <div class="invigilator-card">
+                    <div class="invigilator-name">{{ invigilator.name }}</div>
+                    <div class="invigilator-details">
+                        <small>ID: {{ invigilator.staff_id }}</small>
+                        <small>Dept: {{ invigilator.department }}</small>
+                        <small>Max Sessions: {{ invigilator.max_sessions }}</small>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Display Personal Schedule -->
+        {% if personal_schedule %}
+        <div class="section">
+            <h2><i class="fas fa-user-graduate"></i> Personal Schedule for Student: {{ student_id }}</h2>
+            {% if personal_schedule %}
+            <div class="schedule-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Course</th>
+                            <th>Time Slot</th>
+                            <th>Room</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for exam in personal_schedule %}
+                        <tr>
+                            <td><strong>{{ exam.course }}</strong></td>
+                            <td>{{ exam.time_slot }}</td>
+                            <td>{{ exam.room }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <p class="no-data">No exams found for this student.</p>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        <!-- Display Full Schedule with Invigilators -->
+        {% if schedule %}
+        <div class="section">
+            <h2><i class="fas fa-calendar"></i> Examination Schedule with Invigilator Assignments</h2>
+            <div class="schedule-info">
+                <p>Total Exams Scheduled: <strong>{{ schedule|length }}</strong></p>
+                <p>Invigilators Assigned: <strong>{{ invigilators|length if invigilators else 0 }}</strong> staff members</p>
+            </div>
+            <div class="schedule-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Time Slot</th>
+                            <th>Room</th>
+                            <th>Course</th>
+                            <th>Students</th>
+                            <th>Room Capacity</th>
+                            <th>Invigilators Assigned</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for exam in schedule %}
+                        <tr>
+                            <td>{{ exam.time_slot }}</td>
+                            <td>{{ exam.room }}</td>
+                            <td><strong>{{ exam.course }}</strong></td>
+                            <td>{{ exam.students }}</td>
+                            <td>{{ exam.room_capacity }}</td>
+                            <td>
+                                {% if exam.invigilators %}
+                                    <div class="invigilators-list">
+                                        {% for invigilator in exam.invigilators %}
+                                            <span class="invigilator-badge">{{ invigilator }}</span>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    <span class="no-invigilators">Not assigned</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <footer>
+        <p>Software Engineering Department - Examination Scheduling System &copy; 2025</p>
+    </footer>
+</body>
+</html>

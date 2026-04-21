@@ -1,0 +1,13 @@
+Time Slot,Room,Room Capacity,Course,Students,Invigilators Required,Invigilators Assigned,Invigilator 1,Invigilator 2,Invigilator 3,Invigilator 4
+Monday 9:00-12:00,LT1,100,CSC201,100,3,"Dr. John Smith (STF001), Prof. Sarah Johnson (STF002), Dr. Mike Chen (STF003)",Dr. John Smith (STF001),Prof. Sarah Johnson (STF002),Dr. Mike Chen (STF003),
+Monday 9:00-12:00,LT2,80,CSC102,78,3,"Dr. Emily Davis (STF004), Prof. Robert Brown (STF005), Dr. Lisa Wang (STF006)",Dr. Emily Davis (STF004),Prof. Robert Brown (STF005),Dr. Lisa Wang (STF006),
+Monday 9:00-12:00,ROOM_101,60,CSC301,15,2,"Prof. James Wilson (STF007), Dr. Maria Garcia (STF008)",Prof. James Wilson (STF007),Dr. Maria Garcia (STF008),,
+Monday 14:00-17:00,LT1,100,GST101,100,3,"Prof. David Lee (STF009), Dr. Anna Kumar (STF010), Dr. John Smith (STF001)",Prof. David Lee (STF009),Dr. Anna Kumar (STF010),Dr. John Smith (STF001),
+Monday 14:00-17:00,LT2,80,GST102,76,3,"Prof. Sarah Johnson (STF002), Dr. Mike Chen (STF003), Dr. Emily Davis (STF004)",Prof. Sarah Johnson (STF002),Dr. Mike Chen (STF003),Dr. Emily Davis (STF004),
+Monday 14:00-17:00,ROOM_101,60,ENG101,47,2,"Prof. Robert Brown (STF005), Dr. Lisa Wang (STF006)",Prof. Robert Brown (STF005),Dr. Lisa Wang (STF006),,
+Monday 14:00-17:00,ROOM_102,50,PHY102,24,2,"Prof. James Wilson (STF007), Dr. Maria Garcia (STF008)",Prof. James Wilson (STF007),Dr. Maria Garcia (STF008),,
+Tuesday 9:00-12:00,LT1,100,MATH101,98,3,"Prof. David Lee (STF009), Dr. Anna Kumar (STF010), Dr. John Smith (STF001)",Prof. David Lee (STF009),Dr. Anna Kumar (STF010),Dr. John Smith (STF001),
+Tuesday 9:00-12:00,LT2,80,CHEM101,42,3,"Prof. Sarah Johnson (STF002), Dr. Mike Chen (STF003), Dr. Emily Davis (STF004)",Prof. Sarah Johnson (STF002),Dr. Mike Chen (STF003),Dr. Emily Davis (STF004),
+Tuesday 14:00-17:00,LT1,100,CSC101,70,3,"Prof. Robert Brown (STF005), Dr. Lisa Wang (STF006), Prof. James Wilson (STF007)",Prof. Robert Brown (STF005),Dr. Lisa Wang (STF006),Prof. James Wilson (STF007),
+Tuesday 14:00-17:00,LT2,80,MATH102,55,3,"Dr. Maria Garcia (STF008), Prof. David Lee (STF009), Dr. Anna Kumar (STF010)",Dr. Maria Garcia (STF008),Prof. David Lee (STF009),Dr. Anna Kumar (STF010),
+Wednesday 9:00-12:00,LT1,100,PHY101,30,3,"Dr. John Smith (STF001), Prof. Sarah Johnson (STF002), Dr. Mike Chen (STF003)",Dr. John Smith (STF001),Prof. Sarah Johnson (STF002),Dr. Mike Chen (STF003),
